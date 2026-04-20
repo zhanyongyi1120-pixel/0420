@@ -1,7 +1,6 @@
 let capture;
 
 function setup() {
-  createCanvas(400, 400);
   // 建立全螢幕畫布
   createCanvas(windowWidth, windowHeight);
   // 擷取攝影機影像
@@ -11,15 +10,25 @@ function setup() {
 }
 
 function draw() {
-  background(220);
   background('#e7c6ff');
   
   // 計算影像寬高（全螢幕的 60%）
   let vW = width * 0.6;
   let vH = height * 0.6;
+
+  // 計算居中對齊的起始位置
+  let x = (width - vW) / 2;
+  let y = (height - vH) / 2;
   
-  // 將影像顯示在視窗中間
-  image(capture, (width - vW) / 2, (height - vH) / 2, vW, vH);
+  // 修正左右顛倒：進行鏡像處理
+  push();
+  // 將座標系移動到影像區域的右側邊界，然後水平縮放 -1 倍
+  translate(x + vW, y);
+  scale(-1, 1);
+
+  // 在反轉後的座標系中繪製影像，此時起始點設為 (0,0)
+  image(capture, 0, 0, vW, vH);
+  pop();
 }
 
 function windowResized() {
